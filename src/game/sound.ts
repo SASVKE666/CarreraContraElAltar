@@ -10,10 +10,12 @@
  *  Ambos puntos caen en un compás del tempo (140 bpm) y el final lleva un fundido cruzado
  *  ya horneado en el archivo, así que el salto no se oye. Equivale a: cuando quedan ~18 s,
  *  vuelve al segundo ~16. */
-const MUSIC_URL = `${import.meta.env.BASE_URL}assets/music/gameplay.mp3`;
+const MUSIC_URL = `${import.meta.env?.BASE_URL ?? '/'}assets/music/gameplay.mp3`;
 const LOOP_START = 16.161134;
 const LOOP_END = 180.732698;
 const MUSIC_VOLUME = 0.5;
+/** Volumen de los efectos respecto a la música (bajado un poco para que no tapen la pista) */
+const SFX_VOLUME = 0.62;
 
 const STEP_DUR = 60 / 132 / 2; // corchea a 132 bpm
 
@@ -37,6 +39,8 @@ class SoundManager {
   private _enabled = true;
 
   private master: GainNode | null = null;
+  private sfx: GainNode | null = null;
+  private paused = false;
   private musicGain: GainNode | null = null;
   private musicTimer: ReturnType<typeof setInterval> | null = null;
   private nextNoteTime = 0;
@@ -71,9 +75,12 @@ class SoundManager {
         this.master = this.ctx.createGain();
         this.master.gain.value = this._enabled ? 1 : 0;
         this.master.connect(this.ctx.destination);
+        this.sfx = this.ctx.createGain();
+        this.sfx.gain.value = SFX_VOLUME;
+        this.sfx.connect(this.master);
       }
     }
-    if (this.ctx && this.ctx.state === 'suspended') {
+    if (this.ctx && this.ctx.state === 'suspended' && !this.paused) {
       this.ctx.resume().catch(() => {});
     }
   }
@@ -86,9 +93,9 @@ class SoundManager {
     vol: number,
     delay = 0
   ) {
-    if (!this._enabled) return;
+    if (!this._enabled || this.paused) return;
     this.initCtx();
-    if (!this.ctx || !this.master) return;
+    if (!this.ctx || !this.sfx) return;
     const now = this.ctx.currentTime + delay;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
@@ -98,7 +105,7 @@ class SoundManager {
     gain.gain.setValueAtTime(vol, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
     osc.connect(gain);
-    gain.connect(this.master);
+    gain.connect(this.sfx);
     osc.start(now);
     osc.stop(now + dur + 0.02);
   }
@@ -196,10 +203,23 @@ class SoundManager {
       this.thrustGain.gain.value = 0;
       src.connect(filter);
       filter.connect(this.thrustGain);
-      this.thrustGain.connect(this.master);
+      this.thrustGain.connect(this.sfx ?? this.master);
       src.start();
     }
     this.thrustGain.gain.setTargetAtTime(0.1, this.ctx.currentTime, 0.03);
+  }
+
+  /** Pausa / reanuda todo el audio (música incluida) justo donde iba */
+  setPaused(p: boolean) {
+    if (this.paused === p) return;
+    this.paused = p;
+    if (!this.ctx) return;
+    if (p) {
+      this.stopThrust();
+      this.ctx.suspend().catch(() => {});
+    } else {
+      this.ctx.resume().catch(() => {});
+    }
   }
 
   stopThrust() {

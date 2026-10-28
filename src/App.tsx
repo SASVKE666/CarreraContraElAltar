@@ -46,6 +46,12 @@ export default function App() {
     }
   }, [muted]);
 
+  // al pausar el juego también se pausa la música (y los efectos) justo donde iba
+  useEffect(() => {
+    sound.setPaused(paused && phase === 'playing');
+    return () => sound.setPaused(false);
+  }, [paused, phase]);
+
   const play = useCallback(() => {
     setPaused(false);
     setNewRecord(false);

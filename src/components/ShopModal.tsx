@@ -18,6 +18,9 @@ import {
 } from '../game/shopData';
 import type { SaveData } from '../game/save';
 import { VehicleIcon } from './VehicleIcon';
+import { CinematicsPanel } from './CinematicsPanel';
+import { CINEMATICS, unlockedCinematics } from '../game/cinematics';
+import { getSave } from '../game/save';
 
 interface Props {
   save: SaveData;
@@ -140,7 +143,7 @@ const SkinPicker: React.FC<{
 };
 
 export const ShopModal: React.FC<Props> = ({ save, onClose }) => {
-  const [tab, setTab] = useState<'atuendo' | 'vehiculos'>('atuendo');
+  const [tab, setTab] = useState<'atuendo' | 'vehiculos' | 'cine'>('atuendo');
   const [slot, setSlot] = useState<Slot>('skin');
   // skin de vehículo que se está probando
   const [tryingVSkin, setTryingVSkin] = useState<Partial<Record<VehicleKind, string>>>({});
@@ -159,15 +162,19 @@ export const ShopModal: React.FC<Props> = ({ save, onClose }) => {
   const preview: Outfit = { ...save.outfit, ...trying };
 
   const buy = (item: ShopItem) => {
+    const before = new Set(unlockedCinematics(getSave()));
     const res = buyItem(item.id);
     if (res.ok) {
+      const cine = CINEMATICS.filter((c) => unlockedCinematics(getSave()).includes(c.id) && !before.has(c.id));
       if (item.vehicle && item.skinKey) setTryingVSkin((t) => ({ ...t, [item.vehicle as VehicleKind]: undefined }));
       setTrying((t) => {
         const n = { ...t };
         if (item.slot) delete n[item.slot];
         return n;
       });
-      setNote(res.unlocked.length ? `🏆 ¡Logro desbloqueado: ${res.unlocked.map((a) => a.name).join(', ')}!` : `¡Compraste ${item.name}!`);
+      const msgs = [res.unlocked.length ? `🏆 ¡Logro desbloqueado: ${res.unlocked.map((a) => a.name).join(', ')}!` : `¡Compraste ${item.name}!`];
+      if (cine.length) msgs.push(`🎬 ¡Cinemática desbloqueada: ${cine.map((c) => c.title).join(', ')}! Búscala en la pestaña Cinemáticas.`);
+      setNote(msgs.join(' '));
     }
   };
   const equip = (item: ShopItem) => {
@@ -216,7 +223,7 @@ export const ShopModal: React.FC<Props> = ({ save, onClose }) => {
           </div>
           <p className="text-xs text-[#4a1230] mt-1">Los anillos que recoges se guardan al terminar cada partida.</p>
           <div className="mt-2 flex gap-2">
-            {(['atuendo', 'vehiculos'] as const).map((t) => (
+            {(['atuendo', 'vehiculos', 'cine'] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => {
@@ -225,7 +232,7 @@ export const ShopModal: React.FC<Props> = ({ save, onClose }) => {
                 }}
                 className={`font-display text-sm px-4 py-1.5 rounded-full border-[3px] border-[#2a1420] ${tab === t ? 'bg-amber-300 text-[#2a1420]' : 'bg-white/70 text-[#7a1f3d]'}`}
               >
-                {t === 'atuendo' ? '👔 Atuendo y personajes' : '🚗 Vehículos y skins'}
+                {t === 'atuendo' ? '👔 Atuendo y personajes' : t === 'vehiculos' ? '🚗 Vehículos y skins' : '🎬 Cinemáticas'}
               </button>
             ))}
           </div>
@@ -305,6 +312,8 @@ export const ShopModal: React.FC<Props> = ({ save, onClose }) => {
               </div>
             </div>
           )}
+
+          {tab === 'cine' && <CinematicsPanel save={save} />}
 
           {tab === 'vehiculos' && (
             <div className="space-y-3">

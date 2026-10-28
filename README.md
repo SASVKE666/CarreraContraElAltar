@@ -6,13 +6,14 @@ Runner de scroll lateral estilo *Jetpack Joyride*. Es el día de tu boda, te arr
 - **Mantén presionado** (Espacio, ↑, W, clic o toque) para subir. **Suelta** para caer.
 - Esquiva luces eléctricas, torres de copas, arañas de cristal y ramos-misil (avisa un ❤ ! en el borde derecho).
 - Cada golpe acerca a la novia; si el medidor de arriba se vacía, te atrapa.
-- Recoge anillos (10 pts c/u). Power-ups: **Velo** (aguanta 1 golpe), **Imán**, **Luna de miel** (turbo invencible).
+- Recoge anillos (10 pts c/u). Power-ups: **Velo** (aguanta 1 golpe), **Imán**, **Luna de miel** (turbo invencible, sale la mitad de veces que los demás).
 - Pausa: `P` o `Esc`.
 
 ## Regalos, vehículos y logros
 
 - **Tienda 🛍️** (menú → Tienda): los anillos que recoges se guardan en una **cartera** al terminar cada partida (también si sales a medias) y se gastan ahí. Puedes **vestir al novio** (sombrero, traje, corbata, rostro y color del jetpack, con vista previa antes de comprar) y cambiarlo por un disfraz o ponerles **skins** a los vehículos. Los vehículos **no se compran**: salen gratis de los regalos. Los precios están en `src/game/shopData.ts`. (Quien ya había comprado vehículos con la versión anterior recibe el reembolso en su cartera al cargar la partida.)
 - **Skins 🎨**: cada vehículo tiene skins extra (250–600 💍, p. ej. Cisne de hielo, Taxi amarillo, **Limo-hamburguesa**, Carroza calabaza) que se compran y se ponen desde *Vehículos y skins* (paletas en `src/game/art/vehicles.ts`). En *Atuendo y personajes* hay una sección **Personaje** para cambiar al runner por 10 disfraces originales (Fantasma, Conejo, Pirata, Dinosaurio, Astronauta, Robo-Novio, Mago, Ejecutivo, Ninja y Novio Cangrejo; 500–800 💍, dibujados en `src/game/art/costumes.ts`). Un disfraz reemplaza traje, sombrero, corbata y accesorios (el color del jetpack se conserva) y también se ve montado en los vehículos.
+- **Cinemáticas 🎬** (Tienda → Cinemáticas): para volver a ver la intro y dos cinemáticas que se desbloquean comprando (todos los atuendos dorados / absolutamente todo). Para agregar esos videos solo copia `dorado.mp4` y `completo.mp4` a `public/assets/cinematics/` (ver el README de esa carpeta); textos y condiciones se editan en `src/game/cinematics.ts`.
 - **Regalos de boda 🎁**: el primero sale cerca de los 400 m y luego uno cada ~900 m en promedio. Al cruzarlos te subes a un vehículo al azar (se destruyen las trampas y misiles en pantalla y no llega ninguno hasta que acaba el título con los controles); aguanta **un golpe** (si te dan, se destruye y sigues con el jetpack, sin castigo de la novia).
   - **Cisne Inflable**: cada toque da un aletazo; mantén para seguir aleteando.
   - **Limusina Recién Casados**: rueda por el piso; mantén para saltar más alto. Aplasta las torres de copas.

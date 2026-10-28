@@ -184,10 +184,10 @@ const TOAST_T = 3.2;
 const METER_COLORS = ['#fff4e0', '#ffd34d', '#ff8fc0', '#7fe0a0', '#8fdcff', '#c9a3ff'];
 /**
  * Velocidad de scroll según los metros recorridos: sube de forma continua y suave,
- * rápido al principio y más despacio después (330 → ~740 a 2500 m → ~950 a 6000 m).
+ * rápido al principio y más despacio después (330 → ~775 a 2500 m → ~1000 a 6000 m).
  */
 export function speedAt(m: number) {
-  return BASE_SPEED + Math.min(m, 2500) * 0.165 + Math.max(0, Math.min(m, 6000) - 2500) * 0.06;
+  return BASE_SPEED + Math.min(m, 2500) * 0.178 + Math.max(0, Math.min(m, 6000) - 2500) * 0.065;
 }
 /** Segundos de invulnerabilidad tras un golpe (antes 1.6) */
 const INVULN_HIT = 0.8;
@@ -860,7 +860,7 @@ export class Game {
     const types: PickupType[] = [];
     if (!this.shield) types.push('shield', 'shield', 'shield');
     if (this.magnet <= 0) types.push('magnet', 'magnet');
-    if (this.turbo <= 0) types.push('turbo');
+    if (this.turbo <= 0 && this.rnd() < 0.5) types.push('turbo'); // la Luna de miel (invencible) sale la mitad de veces
     if (!types.length) return this.pRingsLine();
     const x0 = W + 80;
     const y = this.r(170, 390);
