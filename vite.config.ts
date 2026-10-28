@@ -5,10 +5,12 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    // Rutas relativas: el build funciona en cualquier carpeta/subruta (GitHub Pages, IDEs, iframes)
+    base: './',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
-        '@': path.resolve(import.meta.dirname ?? '.', '.'),
+        '@': path.resolve(__dirname, '.'),
       },
     },
     server: {

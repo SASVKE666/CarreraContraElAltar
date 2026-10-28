@@ -1,1 +1,136 @@
 @import "tailwindcss";
+
+@theme {
+  --font-display: "Titan One", "Arial Black", Impact, system-ui, sans-serif;
+  --font-sans: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #1b0a14;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@layer components {
+  .btn-primary {
+    @apply font-display text-lg text-[#2a1420] bg-amber-300 hover:bg-amber-200 active:translate-y-[3px] rounded-2xl px-5 py-2.5 border-[3px] border-[#2a1420] shadow-[0_5px_0_#2a1420] active:shadow-[0_2px_0_#2a1420] transition-all;
+  }
+  .btn-secondary {
+    @apply font-display text-base text-rose-50 bg-rose-600/90 hover:bg-rose-500 active:translate-y-[3px] rounded-2xl px-5 py-2 border-[3px] border-[#2a1420] shadow-[0_4px_0_#2a1420] active:shadow-[0_1px_0_#2a1420] transition-all;
+  }
+  .btn-secondary-light {
+    @apply font-display text-base text-[#2a1420] bg-white/80 hover:bg-white active:translate-y-[3px] rounded-2xl px-5 py-2 border-[3px] border-[#2a1420] shadow-[0_4px_0_#2a1420] active:shadow-[0_1px_0_#2a1420] transition-all;
+  }
+}
+
+/* ---- Menú de inicio (encima de la escena, a la derecha de la puerta) ---- */
+.menu-panel {
+  position: absolute;
+  left: 58%;
+  right: 2.5%;
+  top: 3%;
+  bottom: 3%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5cqw;
+  text-align: center;
+  z-index: 10;
+}
+.menu-logo {
+  font-size: 8cqw;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  filter: drop-shadow(0 0.5cqw 0 #2a1420);
+}
+.menu-best {
+  font-size: 1.9cqw;
+  padding: 0.3cqw 1.6cqw;
+  border-radius: 999px;
+  color: #fde68a;
+  background: rgba(30, 8, 20, 0.7);
+  border: 0.25cqw solid rgba(252, 211, 77, 0.7);
+}
+.menu-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4cqw;
+}
+.menu-play {
+  width: 100%;
+  font-size: 3.6cqw;
+  padding: 0.9cqw 1cqw;
+  border-width: 0.35cqw;
+  border-radius: 2cqw;
+}
+.menu-small {
+  font-size: 1.75cqw;
+  padding: 0.8cqw 0.6cqw;
+  border-width: 0.3cqw;
+  border-radius: 1.6cqw;
+  white-space: nowrap;
+}
+.menu-icon {
+  width: 1.15em;
+  height: 1.15em;
+}
+.menu-hint {
+  font-size: 1.3cqw;
+  color: rgba(255, 228, 236, 0.85);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.menu-hint kbd {
+  padding: 0 0.5cqw;
+  border-radius: 0.5cqw;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 228, 236, 0.35);
+}
+/* Móvil en vertical: la escena queda arriba y el menú debajo, con botones grandes */
+@media (orientation: portrait) {
+  .menu-top {
+    align-items: flex-start !important;
+  }
+  .menu-panel {
+    left: 0;
+    right: 0;
+    top: calc(100% + 10px);
+    bottom: auto;
+    padding: 0 18px;
+    gap: 14px;
+  }
+  .menu-logo {
+    font-size: 15cqw;
+  }
+  .menu-best {
+    font-size: 15px;
+    padding: 2px 14px;
+  }
+  .menu-buttons {
+    max-width: 420px;
+    gap: 12px;
+  }
+  .menu-play {
+    font-size: 26px;
+    padding: 10px;
+    border-width: 3px;
+    border-radius: 18px;
+  }
+  .menu-small {
+    font-size: 15px;
+    padding: 10px 6px;
+    border-width: 3px;
+    border-radius: 16px;
+  }
+  .menu-hint {
+    display: none;
+  }
+}

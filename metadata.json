@@ -1,6 +1,6 @@
 {
-  "name": "Unity 2D Auto-Runner Studio - PlayerRunner",
-  "description": "Suite de desarrollo y simulador en tiempo real para Unity 2D Auto-Runner móvil con físicas de salto, deslizamiento y mecánica de persecución.",
+  "name": "Novio en Fuga",
+  "description": "Runner de scroll lateral estilo Jetpack Joyride: un novio arrepentido huye de su furiosa novia con un jetpack de champaña.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
